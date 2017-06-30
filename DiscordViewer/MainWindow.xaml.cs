@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace DiscordViewer
@@ -22,7 +23,7 @@ namespace DiscordViewer
         }
 
         private DiscordSocketClient _client;
-        private ObservableCollection<DiscordMessage> messages;
+        public ObservableCollection<DiscordMessage> messages;
 
         public async Task MainAsync()
         {
@@ -49,6 +50,7 @@ namespace DiscordViewer
                     User = message.Author.Username,
                     Content = message.Content,
                     AvatarUrl = message.Author.GetAvatarUrl(),
+                    MessageOrder = CheckIfNewMessageSet(message)
                 };
                 Dispatcher.Invoke(() =>
                 {
@@ -58,6 +60,22 @@ namespace DiscordViewer
             }
 
             return Task.CompletedTask;
+        }
+
+        private MessageOrder CheckIfNewMessageSet(SocketMessage message)
+        {
+            if (messages.Count <= 0)
+            {
+                return MessageOrder.First;
+            }
+            else if (messages.Last().User == message.Author.Username)
+            {
+                return MessageOrder.FollowOn;
+            }
+            else
+            {
+                return MessageOrder.New;
+            }
         }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
@@ -71,6 +89,29 @@ namespace DiscordViewer
             if (messages.Count > 0)
             {
                 lvMain.ScrollIntoView(messages.Last());
+            }
+        }
+    }
+
+    public class ChatTemplateSelector : DataTemplateSelector
+    {
+        public override DataTemplate SelectTemplate(object item, DependencyObject container)
+        {
+            FrameworkElement elemnt = container as FrameworkElement;
+            DiscordMessage chatMessage = (DiscordMessage)item;
+
+            switch (chatMessage.MessageOrder)
+            {
+                case MessageOrder.First:
+                    return elemnt.FindResource("FirstChatTemplate") as DataTemplate;
+
+                case MessageOrder.FollowOn:
+                    return elemnt.FindResource("SlimChatTemplate") as DataTemplate;
+
+                case MessageOrder.New:
+
+                default:
+                    return elemnt.FindResource("FullChatTemplate") as DataTemplate;
             }
         }
     }

@@ -17,23 +17,38 @@
                 <Setter Property="Focusable" Value="False" />
             </Style.Setters>
         </Style>
+
+        <DataTemplate DataType="{x:Type local:DiscordMessage}" x:Key="FullChatTemplate">
+            <StackPanel Margin="0,10,0,0">
+                <Separator Background="#444444"></Separator>
+                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                    <Image Source="{Binding AvatarUrl}" Height="24" Width="24" Margin="0,0,10,0" />
+                    <TextBlock Text="{Binding User}" FontWeight="Bold" FontSize="16" Foreground="White" TextWrapping="WrapWithOverflow" />
+                </StackPanel>
+                <TextBlock Text="{Binding Content}" FontSize="15" Foreground="#DDDDDD" TextWrapping="WrapWithOverflow" Margin="35,0,0,0" />
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type local:DiscordMessage}" x:Key="FirstChatTemplate">
+            <StackPanel Margin="0,0,0,0">
+                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                    <Image Source="{Binding AvatarUrl}" Height="24" Width="24" Margin="0,0,10,0" />
+                    <TextBlock Text="{Binding User}" FontWeight="Bold" FontSize="16" Foreground="White" TextWrapping="WrapWithOverflow" />
+                </StackPanel>
+                <TextBlock Text="{Binding Content}" FontSize="15" Foreground="#DDDDDD" TextWrapping="WrapWithOverflow" Margin="35,0,0,0" />
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type local:DiscordMessage}" x:Key="SlimChatTemplate">
+            <StackPanel Margin="0,0,0,0">
+                <TextBlock Text="{Binding Content}" FontSize="15" Foreground="#DDDDDD" TextWrapping="WrapWithOverflow" Margin="35,0,0,0" />
+            </StackPanel>
+        </DataTemplate>
+        <local:ChatTemplateSelector x:Key="myChatTemplateSelector" />
     </Window.Resources>
     <Grid>
-        <ListView  Name="lvMain" Background="Transparent" ScrollViewer.VerticalScrollBarVisibility="Hidden" 
+        <ListView  Name="lvMain" Background="Transparent" ScrollViewer.VerticalScrollBarVisibility="Hidden"
                    ScrollViewer.HorizontalScrollBarVisibility="Hidden" BorderBrush="{x:Null}"
-                   HorizontalContentAlignment="Stretch">
-            <ListView.ItemTemplate>
-                <DataTemplate DataType="{x:Type local:DiscordMessage}">
-                    <StackPanel Margin="0,0,0,10" >
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                            <Image Source="{Binding AvatarUrl}" Height="24" Width="24" Margin="0,0,10,0"/>
-                            <TextBlock Text="{Binding User}" FontWeight="Bold" FontSize="16" Foreground="White" TextWrapping="WrapWithOverflow" />
-                        </StackPanel>
-                        <TextBlock Text="{Binding Content}" FontSize="15" Foreground="#DDDDDD" TextWrapping="WrapWithOverflow" Margin="0,0,0,10" />
-                        <Separator Background="#444444"></Separator>
-                    </StackPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>
+                   HorizontalContentAlignment="Stretch" ItemTemplateSelector="{StaticResource myChatTemplateSelector}"
+                   IsHitTestVisible="False" >
         </ListView>
     </Grid>
 </Window>
