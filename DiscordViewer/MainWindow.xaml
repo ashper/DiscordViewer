@@ -1,0 +1,39 @@
+﻿<Window x:Class="DiscordViewer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DiscordViewer"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="700" Width="700"  Topmost="True" WindowStyle="None"
+        ResizeMode="CanResizeWithGrip" AllowsTransparency="True"  Left="20" Top="20"
+        MouseDown="Window_MouseDown" SizeChanged="Window_SizeChanged">
+    <Window.Background>
+        <SolidColorBrush Color="black" Opacity="0.5" />
+    </Window.Background>
+    <Window.Resources>
+        <Style TargetType="{x:Type ListViewItem}">
+            <Style.Setters>
+                <Setter Property="Focusable" Value="False" />
+            </Style.Setters>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <ListView  Name="lvMain" Background="Transparent" ScrollViewer.VerticalScrollBarVisibility="Hidden" 
+                   ScrollViewer.HorizontalScrollBarVisibility="Hidden" BorderBrush="{x:Null}"
+                   HorizontalContentAlignment="Stretch">
+            <ListView.ItemTemplate>
+                <DataTemplate DataType="{x:Type local:DiscordMessage}">
+                    <StackPanel Margin="0,0,0,10" >
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                            <Image Source="{Binding AvatarUrl}" Height="24" Width="24" Margin="0,0,10,0"/>
+                            <TextBlock Text="{Binding User}" FontWeight="Bold" FontSize="16" Foreground="White" TextWrapping="WrapWithOverflow" />
+                        </StackPanel>
+                        <TextBlock Text="{Binding Content}" FontSize="15" Foreground="#DDDDDD" TextWrapping="WrapWithOverflow" Margin="0,0,0,10" />
+                        <Separator Background="#444444"></Separator>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</Window>
